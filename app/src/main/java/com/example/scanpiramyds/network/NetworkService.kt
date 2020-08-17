@@ -4,41 +4,35 @@ package com.example.scanpiramyds.network
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class NetworkService{
+class NetworkService {
 
-    private var INSTANCE: NetworkService? = null
-    private lateinit var mRetrofit: Retrofit
-    private val BASE_URL = "https://jsonplaceholder.typicode.com"
 
-    constructor(retrofit: Retrofit)  {
+    private var mRetrofit: Retrofit
+
+
+    constructor(retrofit: Retrofit) {
         mRetrofit = retrofit
     }
 
-    fun getNetworkInstance(): NetworkService{
-        if(INSTANCE === null){
-            INSTANCE = NetworkService(
-                Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build())
+    companion object {
+        private var INSTANCE: NetworkService? = null
+        private val BASE_URL = "https://193.151.89.131:3000"
+
+        fun getNetworkInstance(): NetworkService {
+            if (INSTANCE === null) {
+                INSTANCE = NetworkService(
+                    Retrofit.Builder()
+                        .baseUrl(BASE_URL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build()
+                )
+            }
+            return INSTANCE as NetworkService
         }
-        return INSTANCE as NetworkService
     }
 
-    fun getJSONApi(): JSONPlaceholderAPI{
+    fun getJSONApi(): JSONPlaceholderAPI {
         return mRetrofit.create(JSONPlaceholderAPI::class.java)
     }
-
-//    companion object {
-//        private var INSTANCE: NetworkService? = null
-//
-//
-//        fun getInstance(context: Context, coroutineScope: CoroutineScope): NetworkService {
-//            return INSTANCE? : synchronized(this) {
-//                val instance = NetworkService()
-//                INSTANCE = instance
-//                instance
-//            }
-//        }
-//    }
 }
+

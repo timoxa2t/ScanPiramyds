@@ -41,11 +41,11 @@ abstract class AppDatabase: RoomDatabase() {
         }
 
         suspend fun populateDatabase(piramydDao: PiramydDao){
-            piramydDao.insert(Piramyd("000002487", "1154"))
-            piramydDao.insert(Piramyd("000002488", "1155"))
-            piramydDao.insert(Piramyd("000002489", "1156"))
-            piramydDao.insert(Piramyd("000002490", "1157"))
-            piramydDao.insert(Piramyd("000002491", "1158"))
+//            piramydDao.insert(Piramyd("000002487", "1154"))
+//            piramydDao.insert(Piramyd("000002488", "1155"))
+//            piramydDao.insert(Piramyd("000002489", "1156"))
+//            piramydDao.insert(Piramyd("000002490", "1157"))
+//            piramydDao.insert(Piramyd("000002491", "1158"))
         }
     }
 
