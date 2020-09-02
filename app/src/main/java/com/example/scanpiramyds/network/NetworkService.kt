@@ -3,6 +3,16 @@ package com.example.scanpiramyds.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.BufferedInputStream
+import java.io.FileInputStream
+import java.io.InputStream
+import java.net.URL
+import java.security.KeyStore
+import java.security.cert.CertificateFactory
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManagerFactory
+import javax.security.cert.X509Certificate
 
 class NetworkService {
 

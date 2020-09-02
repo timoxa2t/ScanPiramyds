@@ -3,4 +3,5 @@
     <string name="barcode_label">ШтрихКод:</string>
     <string name="empty_placeholder">Пусто</string>
     <string name="piramyd_name_label">Піраміда:</string>
+    <string name="take_a_photo">Take a Photo</string>
 </resources>

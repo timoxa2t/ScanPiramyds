@@ -1,29 +1,24 @@
 package com.example.scanpiramyds
 
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.scanpiramyds.UI.PiramydsListAdapter
-
+import com.example.scanpiramyds.database.Piramyd
 import com.example.scanpiramyds.database.PiramydViewModel
 import com.example.scanpiramyds.database.ViewModelFactory
 import com.example.scanpiramyds.network.NetworkService
-import com.google.android.gms.security.ProviderInstaller
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
-import java.net.HttpURLConnection
-import javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory
-import com.example.scanpiramyds.database.Piramyd as Piramyd
-import retrofit2.Callback as Callback
-
 
 
 class MainActivity : AppCompatActivity(), Callback<List<Piramyd>> {
@@ -32,11 +27,15 @@ class MainActivity : AppCompatActivity(), Callback<List<Piramyd>> {
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: LinearLayoutManager
 
+    private val Image_Capture_Code = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        syncWithDatabase()
+        val cInt = Intent(this, CameraActivity::class.java)
+        startActivityForResult(cInt, Image_Capture_Code)
+        //syncWithDatabase()
 
         recyclerView = recycler_view
         layoutManager = LinearLayoutManager(this)
