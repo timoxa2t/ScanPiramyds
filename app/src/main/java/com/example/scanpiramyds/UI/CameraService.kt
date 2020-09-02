@@ -16,6 +16,7 @@ import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import java.util.*
+import java.util.logging.Handler
 
 
 class CameraService(
@@ -88,7 +89,8 @@ class CameraService(
 
     private fun createCameraPreviewSession() {
 
-        val texture: SurfaceTexture? = mCameraView.getSurfaceTexture()
+        if(mCameraView.surfaceTexture == null) {return}
+        val texture: SurfaceTexture? = mCameraView.surfaceTexture
         // texture.setDefaultBufferSize(1920,1080);
         val surface = Surface(texture)
         try {
@@ -129,14 +131,14 @@ class CameraService(
             super.onCaptureCompleted(session, request, result)
 
 
-            if(result.frameNumber == 0.toLong()){ return}
+            if(mCameraView.bitmap !== null){ return}
 
             val frame: Frame = Frame.Builder().setBitmap(mCameraView.bitmap).build()
 
             val barcodes: SparseArray<Barcode> = mBarcodeDetector.detect(frame)
 
             if (barcodes.size() > 0) {
-                val thisCode = barcodes.valueAt(0).boundingBox
+                val thisCode = barcodes.valueAt(0).hashCode()
                 Log.i(LOG_TAG, "" + thisCode)
 
             }
