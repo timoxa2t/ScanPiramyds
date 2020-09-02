@@ -1,20 +1,29 @@
 package com.example.scanpiramyds.UI
 
 import android.Manifest
+import android.R
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.util.Log
+import android.util.SparseArray
 import android.view.Surface
-import android.view.SurfaceView
 import android.view.TextureView
-import android.view.View
+import android.widget.TextView
 import androidx.core.content.ContextCompat.checkSelfPermission
+import com.google.android.gms.vision.Frame
+import com.google.android.gms.vision.barcode.Barcode
+import com.google.android.gms.vision.barcode.BarcodeDetector
 import java.util.*
 
 
-class CameraService(context: Context, cameraManager: CameraManager, cameraID: String, cameraView: TextureView) {
+class CameraService(
+    context: Context,
+    cameraManager: CameraManager,
+    cameraID: String,
+    cameraView: TextureView
+) {
     private val mCameraID: String
     private var mCameraDevice: CameraDevice? = null
     private var mCaptureSession: CameraCaptureSession? = null
@@ -22,12 +31,16 @@ class CameraService(context: Context, cameraManager: CameraManager, cameraID: St
     private val mContext: Context
     private val LOG_TAG: String = "My log tag"
     private val mCameraView: TextureView
+    private val mBarcodeDetector: BarcodeDetector
 
     init {
         mCameraManager = cameraManager
         mCameraID = cameraID
         mContext = context
         mCameraView = cameraView
+        mBarcodeDetector = BarcodeDetector.Builder(context)
+            .setBarcodeFormats(Barcode.CODE_128)
+            .build()
     }
 
     val isOpen: Boolean
@@ -89,7 +102,11 @@ class CameraService(context: Context, cameraManager: CameraManager, cameraID: St
                     override fun onConfigured(session: CameraCaptureSession) {
                         mCaptureSession = session
                         try {
-                            mCaptureSession?.setRepeatingRequest(builder.build(), null, null)
+                            mCaptureSession?.setRepeatingRequest(
+                                builder.build(),
+                                cameraCaptureCallback,
+                                null
+                            )
                         } catch (e: CameraAccessException) {
                             e.printStackTrace()
                         }
@@ -110,7 +127,19 @@ class CameraService(context: Context, cameraManager: CameraManager, cameraID: St
             result: TotalCaptureResult
         ) {
             super.onCaptureCompleted(session, request, result)
-            Log.i(LOG_TAG, "capture result")
+
+
+            if(result.frameNumber == 0.toLong()){ return}
+
+            val frame: Frame = Frame.Builder().setBitmap(mCameraView.bitmap).build()
+
+            val barcodes: SparseArray<Barcode> = mBarcodeDetector.detect(frame)
+
+            if (barcodes.size() > 0) {
+                val thisCode = barcodes.valueAt(0).boundingBox
+                Log.i(LOG_TAG, "" + thisCode)
+
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import android.hardware.camera2.CameraManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.scanpiramyds.UI.CameraService
@@ -53,10 +54,9 @@ class CameraActivity : AppCompatActivity() {
 
 
 
-//    fun takePhoto(view: View){
-//        val cInt = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//        startActivityForResult(cInt, Image_Capture_Code)
-//    }
+    fun scanBarcode(view: View){
+      Log.i(LOG_TAG, "Button pressed")
+    }
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)

@@ -28,5 +28,6 @@
         android:text="@string/take_a_photo"
         android:textStyle="bold"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:onClick="scanBarcode"/>
 </RelativeLayout>
