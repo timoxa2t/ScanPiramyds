@@ -9,4 +9,8 @@ class PiramydsRepository(private val piramydDao: PiramydDao) {
     suspend fun insert(piramyd: Piramyd){
         piramydDao.insert(piramyd);
     }
+
+    fun updateAll(piramyds: List<Piramyd>){
+        piramydDao.updateAll(piramyds)
+    }
 }

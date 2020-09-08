@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.lang.Appendable
 
-@Database(entities = arrayOf(Piramyd::class), version = 2)
+@Database(entities = arrayOf(Piramyd::class), version = 3)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun piramydDao(): PiramydDao
 
@@ -41,11 +41,18 @@ abstract class AppDatabase: RoomDatabase() {
         }
 
         suspend fun populateDatabase(piramydDao: PiramydDao){
-//            piramydDao.insert(Piramyd("000002487", "1154"))
-//            piramydDao.insert(Piramyd("000002488", "1155"))
-//            piramydDao.insert(Piramyd("000002489", "1156"))
-//            piramydDao.insert(Piramyd("000002490", "1157"))
-//            piramydDao.insert(Piramyd("000002491", "1158"))
+            var piramydList = mutableListOf<Piramyd>()
+            piramydList.add(Piramyd("000000702", "663", false))
+            piramydList.add(Piramyd("000000703", "664", false))
+            piramydList.add(Piramyd("000000704", "665", false))
+            piramydList.add(Piramyd("997000000763", "Tymoshov", false))
+
+            piramydList.forEach({
+                piramydDao.delete(it)
+                piramydDao.insert(it)
+            }
+            )
+
         }
     }
 

@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -33,9 +36,9 @@ class MainActivity : AppCompatActivity(), Callback<List<Piramyd>> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val cInt = Intent(this, CameraActivity::class.java)
-        startActivityForResult(cInt, Image_Capture_Code)
+
         //syncWithDatabase()
+
 
         recyclerView = recycler_view
         layoutManager = LinearLayoutManager(this)
@@ -43,15 +46,33 @@ class MainActivity : AppCompatActivity(), Callback<List<Piramyd>> {
         val adapter = PiramydsListAdapter(this)
         recyclerView.adapter = adapter
 
-        piramydViewModel = ViewModelProvider(this, ViewModelFactory(application)).get(PiramydViewModel::class.java)
-        piramydViewModel.allPiramyds.observe(this, Observer { piramyds -> piramyds?.let {adapter.setPiramyds(it)}})
+        piramydViewModel =
+            ViewModelProvider(this, ViewModelFactory(application)).get(PiramydViewModel::class.java)
+        piramydViewModel.allPiramyds.observe(
+            this,
+            Observer { piramyds -> piramyds?.let { adapter.setPiramyds(it) } })
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = getMenuInflater().inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.menu_item_scan_barcodes -> openCameraActivity()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun openCameraActivity(){
+        val cInt = Intent(this, CameraActivity::class.java)
+        startActivityForResult(cInt, Image_Capture_Code)
+    }
+
+
     fun syncWithDatabase(){
-
-
-
 
         NetworkService.getNetworkInstance()
             .getJSONApi()
@@ -72,4 +93,21 @@ class MainActivity : AppCompatActivity(), Callback<List<Piramyd>> {
 
         }
     }
+
+    fun syncronizeDataWithDatabase(){
+        piramydViewModel.updateAll()
+    }
+
+    override fun onDestroy() {
+        syncronizeDataWithDatabase()
+
+        super.onDestroy()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        recyclerView.adapter?.notifyDataSetChanged()
+    }
+
+
 }
