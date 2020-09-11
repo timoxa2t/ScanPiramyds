@@ -37,8 +37,10 @@ class CameraService(context: Context, cameraManager: CameraManager, cameraID: St
         mCameraView = cameraView
         mActivityCallback = callback
         mDetector = BarcodeDetector.Builder(mContext)
-            .setBarcodeFormats(Barcode.CODE_128)
+            .setBarcodeFormats(Barcode.CODE_128 or Barcode.QR_CODE)
             .build()
+
+
     }
 
     val isOpen: Boolean

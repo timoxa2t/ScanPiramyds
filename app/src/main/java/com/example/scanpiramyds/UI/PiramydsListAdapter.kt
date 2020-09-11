@@ -59,4 +59,6 @@ class PiramydsListAdapter internal constructor(context: Context): RecyclerView.A
         this.piramyds = piramyds
         notifyDataSetChanged()
     }
+
+
 }

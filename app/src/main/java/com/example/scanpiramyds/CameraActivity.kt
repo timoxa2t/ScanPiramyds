@@ -86,12 +86,23 @@ class CameraActivity : AppCompatActivity(), CameraActivityCallback {
 
             val barcode =  barcodes.valueAt(0).rawValue
             mCurrentPiramyd = mPyramidsList?.find { piramyd -> barcode.equals("996" + piramyd.code) }
-            barcode_view.text = mCurrentPiramyd?.name ?: barcode
-            button_save_barcode.visibility = View.VISIBLE
+            name_view.text = mCurrentPiramyd?.name ?: resources.getText(R.string.piramyd_not_in_database_label)
 
+            barcode_view.text = barcode
+
+            if(mCurrentPiramyd != null) {
+                    if(mCurrentPiramyd?.checked == true) {
+                        piramyd_received_view.text = "Отримано"
+                    }else{
+                        piramyd_received_view.text = "Не отримано"
+                    }
+                    button_save_barcode.visibility = View.VISIBLE
+            }
         }
         else{
-            barcode_view.text = getString(R.string.label_scan_barcode)
+            name_view.text = getString(R.string.label_scan_barcode)
+            barcode_view.text = ""
+            piramyd_received_view.text = ""
             button_save_barcode.visibility = View.INVISIBLE
         }
     }
@@ -103,6 +114,17 @@ class CameraActivity : AppCompatActivity(), CameraActivityCallback {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onPause() {
+
+        syncronizeDataWithDatabase()
+        super.onPause()
+    }
+
+    fun syncronizeDataWithDatabase(){
+        piramydViewModel.updateAll()
+    }
+
 
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 //        super.onActivityResult(requestCode, resultCode, data)

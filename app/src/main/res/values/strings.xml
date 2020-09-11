@@ -7,4 +7,6 @@
     <string name="label_scan_barcode">Проскануйте штрихкод</string>
     <string name="label_write_barcode">Записати</string>
     <string name="label_scan_barcodes">Сканувати штрихкоди</string>
+    <string name="piramyd_not_in_database_label">Немає в базі</string>
+    <string name="received">Отримано</string>
 </resources>

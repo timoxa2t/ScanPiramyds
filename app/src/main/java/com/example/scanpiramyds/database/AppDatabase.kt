@@ -41,17 +41,17 @@ abstract class AppDatabase: RoomDatabase() {
         }
 
         suspend fun populateDatabase(piramydDao: PiramydDao){
-            var piramydList = mutableListOf<Piramyd>()
-            piramydList.add(Piramyd("000000702", "663", false))
-            piramydList.add(Piramyd("000000703", "664", false))
-            piramydList.add(Piramyd("000000704", "665", false))
-            piramydList.add(Piramyd("997000000763", "Tymoshov", false))
-
-            piramydList.forEach({
-                piramydDao.delete(it)
-                piramydDao.insert(it)
-            }
-            )
+//            var piramydList = mutableListOf<Piramyd>()
+//          piramydList.add(Piramyd("000001049", "1066", false))
+//          piramydList.add(Piramyd("000002750", "1417", false))
+//          piramydList.add(Piramyd("000002802", "1469", false))
+//
+//
+//            piramydList.forEach({
+//                piramydDao.delete(it)
+//                piramydDao.insert(it)
+//            }
+//            )
 
         }
     }

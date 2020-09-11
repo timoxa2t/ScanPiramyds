@@ -98,6 +98,11 @@ class MainActivity : AppCompatActivity(), Callback<List<Piramyd>> {
         piramydViewModel.updateAll()
     }
 
+    override fun onPause() {
+        syncronizeDataWithDatabase()
+        super.onPause()
+    }
+
     override fun onDestroy() {
         syncronizeDataWithDatabase()
 
