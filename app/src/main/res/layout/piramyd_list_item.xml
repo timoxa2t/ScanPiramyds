@@ -6,7 +6,9 @@
     android:layout_gravity="center_horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="5sp">
+    android:background="@drawable/piramyd_item_frame"
+    android:padding="5dp"
+    android:layout_margin="2dp">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -60,6 +62,5 @@
         android:id="@+id/piramyd_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:onClick="checked"/>
+        android:layout_gravity="center_vertical"/>
 </LinearLayout>

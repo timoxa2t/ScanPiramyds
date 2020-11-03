@@ -1,10 +1,7 @@
 package com.example.scanpiramyds.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface PiramydDao {
@@ -17,8 +14,12 @@ interface PiramydDao {
     @Query("SELECT * FROM piramyd WHERE name LIKE :name LIMIT 1")
     fun findByName(name: String): Piramyd
 
+    @Update
+    fun updateAll (piramyds: List<Piramyd>)
+
     @Insert
     fun insertAll(vararg piramyds: Piramyd)
+
     @Insert
     fun insert(piramyd: Piramyd)
 

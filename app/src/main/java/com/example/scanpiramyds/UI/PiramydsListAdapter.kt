@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scanpiramyds.R
 import com.example.scanpiramyds.database.Piramyd
@@ -15,14 +15,27 @@ class PiramydsListAdapter internal constructor(context: Context): RecyclerView.A
     private var piramyds = emptyList<Piramyd>()
 
 
-    inner class PiramydViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class PiramydViewHolder(itemView: View): RecyclerView.ViewHolder(itemView),
+        CompoundButton.OnCheckedChangeListener {
+
+        private lateinit var mPiramyd: Piramyd
 
         private val piramydBarcode: TextView = itemView.findViewById(R.id.piramyd_barcode)
         private val piramydName: TextView = itemView.findViewById(R.id.piramyd_name)
+        private val piramydChecked: CheckBox = itemView.findViewById(R.id.piramyd_checkbox)
+
 
         fun bind(piramyd: Piramyd){
+            mPiramyd = piramyd
+
             piramydName.text = piramyd.name
             piramydBarcode.text = piramyd.code
+            piramydChecked.isChecked = piramyd.checked
+            piramydChecked.setOnCheckedChangeListener(this)
+        }
+
+        override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+            mPiramyd.checked = p1
         }
     }
 
@@ -46,4 +59,6 @@ class PiramydsListAdapter internal constructor(context: Context): RecyclerView.A
         this.piramyds = piramyds
         notifyDataSetChanged()
     }
+
+
 }

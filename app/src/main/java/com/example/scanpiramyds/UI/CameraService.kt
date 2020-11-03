@@ -1,30 +1,24 @@
 package com.example.scanpiramyds.UI
 
 import android.Manifest
-import android.R
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.util.Log
-import android.util.SparseArray
 import android.view.Surface
 import android.view.TextureView
-import android.widget.TextView
+import android.view.View
 import androidx.core.content.ContextCompat.checkSelfPermission
+import com.example.scanpiramyds.CameraActivity
+import com.example.scanpiramyds.R
 import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import java.util.*
-import java.util.logging.Handler
 
 
-class CameraService(
-    context: Context,
-    cameraManager: CameraManager,
-    cameraID: String,
-    cameraView: TextureView
-) {
+class CameraService(context: Context, cameraManager: CameraManager, cameraID: String, cameraView: TextureView, callback: CameraActivityCallback) {
     private val mCameraID: String
     private var mCameraDevice: CameraDevice? = null
     private var mCaptureSession: CameraCaptureSession? = null
@@ -32,16 +26,21 @@ class CameraService(
     private val mContext: Context
     private val LOG_TAG: String = "My log tag"
     private val mCameraView: TextureView
-    private val mBarcodeDetector: BarcodeDetector
+    private val mDetector:BarcodeDetector
+    private val mActivityCallback: CameraActivityCallback
+
 
     init {
         mCameraManager = cameraManager
         mCameraID = cameraID
         mContext = context
         mCameraView = cameraView
-        mBarcodeDetector = BarcodeDetector.Builder(context)
-            .setBarcodeFormats(Barcode.CODE_128)
+        mActivityCallback = callback
+        mDetector = BarcodeDetector.Builder(mContext)
+            .setBarcodeFormats(Barcode.CODE_128 or Barcode.QR_CODE)
             .build()
+
+
     }
 
     val isOpen: Boolean
@@ -89,8 +88,8 @@ class CameraService(
 
     private fun createCameraPreviewSession() {
 
-        if(mCameraView.surfaceTexture == null) {return}
-        val texture: SurfaceTexture? = mCameraView.surfaceTexture
+        val texture: SurfaceTexture? = mCameraView.getSurfaceTexture()
+        mCameraView.surfaceTextureListener = textureChangeListener
         // texture.setDefaultBufferSize(1920,1080);
         val surface = Surface(texture)
         try {
@@ -104,11 +103,7 @@ class CameraService(
                     override fun onConfigured(session: CameraCaptureSession) {
                         mCaptureSession = session
                         try {
-                            mCaptureSession?.setRepeatingRequest(
-                                builder.build(),
-                                cameraCaptureCallback,
-                                null
-                            )
+                            mCaptureSession?.setRepeatingRequest(builder.build(), null, null)
                         } catch (e: CameraAccessException) {
                             e.printStackTrace()
                         }
@@ -130,19 +125,35 @@ class CameraService(
         ) {
             super.onCaptureCompleted(session, request, result)
 
-
-            if(mCameraView.bitmap !== null){ return}
-
-            val frame: Frame = Frame.Builder().setBitmap(mCameraView.bitmap).build()
-
-            val barcodes: SparseArray<Barcode> = mBarcodeDetector.detect(frame)
-
-            if (barcodes.size() > 0) {
-                val thisCode = barcodes.valueAt(0).hashCode()
-                Log.i(LOG_TAG, "" + thisCode)
-
-            }
         }
+    }
+
+    val textureChangeListener = object: TextureView.SurfaceTextureListener{
+        override fun onSurfaceTextureSizeChanged(p0: SurfaceTexture, p1: Int, p2: Int) {
+            TODO("Not yet implemented")
+        }
+
+        override fun onSurfaceTextureUpdated(p0: SurfaceTexture) {
+            if(mCameraView.bitmap == null) return
+
+
+
+
+            val bitmap = mCameraView.bitmap
+            val frame = Frame.Builder().setBitmap(bitmap).build()
+            val barcodes = mDetector.detect(frame)
+
+            mActivityCallback.refreshCameraLayout(barcodes)
+        }
+
+        override fun onSurfaceTextureDestroyed(p0: SurfaceTexture): Boolean {
+            return true
+        }
+
+        override fun onSurfaceTextureAvailable(p0: SurfaceTexture, p1: Int, p2: Int) {
+
+        }
+
     }
 
 }

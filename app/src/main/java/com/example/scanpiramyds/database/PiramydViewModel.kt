@@ -27,4 +27,11 @@ class PiramydViewModel(application: Application): AndroidViewModel(application) 
         repository.insert(piramyd)
     }
 
+    fun updateAll() = viewModelScope.launch(Dispatchers.IO){
+        val piramydsList = allPiramyds.value
+        if(piramydsList != null){
+            repository.updateAll(piramydsList)
+        }
+    }
+
 }

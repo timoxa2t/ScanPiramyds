@@ -4,4 +4,9 @@
     <string name="empty_placeholder">Пусто</string>
     <string name="piramyd_name_label">Піраміда:</string>
     <string name="take_a_photo">Take a Photo</string>
+    <string name="label_scan_barcode">Проскануйте штрихкод</string>
+    <string name="label_write_barcode">Записати</string>
+    <string name="label_scan_barcodes">Сканувати штрихкоди</string>
+    <string name="piramyd_not_in_database_label">Немає в базі</string>
+    <string name="received">Отримано</string>
 </resources>
