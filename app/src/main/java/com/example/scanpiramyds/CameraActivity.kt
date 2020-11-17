@@ -7,19 +7,17 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.scanpiramyds.UI.CameraActivityCallback
 import com.example.scanpiramyds.UI.CameraService
-import com.example.scanpiramyds.database.Piramyd
+import com.example.scanpiramyds.database.Pyramid
 import com.example.scanpiramyds.database.PiramydViewModel
 import com.example.scanpiramyds.database.ViewModelFactory
 import com.google.android.gms.vision.barcode.Barcode
@@ -29,11 +27,11 @@ import kotlinx.android.synthetic.main.activity_camera.*
 class CameraActivity : AppCompatActivity(), CameraActivityCallback {
 
     private lateinit var piramydViewModel: PiramydViewModel
-    private var mPyramidsList: List<Piramyd>? = null
+    private var mPyramidsList: List<Pyramid>? = null
     private lateinit var mCameraManager: CameraManager
     private val LOG_TAG: String = "My log tag"
     private var myCameras: MutableList<CameraService> = mutableListOf()
-    private var mCurrentPiramyd: Piramyd? = null
+    private var mCurrentPyramid: Pyramid? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +45,7 @@ class CameraActivity : AppCompatActivity(), CameraActivityCallback {
         }
 
         piramydViewModel = ViewModelProvider(this, ViewModelFactory(application)).get(PiramydViewModel::class.java)
-        piramydViewModel.allPiramyds.observe(this, Observer { piramyds -> piramyds?.let {mPyramidsList = it}})
+        piramydViewModel.allPyramids.observe(this, Observer { piramyds -> piramyds?.let {mPyramidsList = it}})
 
 
         mCameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
@@ -73,8 +71,8 @@ class CameraActivity : AppCompatActivity(), CameraActivityCallback {
 
 
     fun writeBarcode(view: View){
-        if(mCurrentPiramyd != null) {
-            mCurrentPiramyd?.checked = true
+        if(mCurrentPyramid != null) {
+            mCurrentPyramid?.checked = true
         }
 
     }
@@ -85,13 +83,13 @@ class CameraActivity : AppCompatActivity(), CameraActivityCallback {
         if(barcodes.size() > 0) {
 
             val barcode =  barcodes.valueAt(0).rawValue
-            mCurrentPiramyd = mPyramidsList?.find { piramyd -> barcode.equals("996" + piramyd.code) }
-            name_view.text = mCurrentPiramyd?.name ?: resources.getText(R.string.piramyd_not_in_database_label)
+            mCurrentPyramid = mPyramidsList?.find { piramyd -> barcode.equals("996" + piramyd.code) }
+            name_view.text = mCurrentPyramid?.name ?: resources.getText(R.string.piramyd_not_in_database_label)
 
             barcode_view.text = barcode
 
-            if(mCurrentPiramyd != null) {
-                    if(mCurrentPiramyd?.checked == true) {
+            if(mCurrentPyramid != null) {
+                    if(mCurrentPyramid?.checked == true) {
                         piramyd_received_view.text = "Отримано"
                     }else{
                         piramyd_received_view.text = "Не отримано"

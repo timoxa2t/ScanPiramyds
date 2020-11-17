@@ -26,7 +26,7 @@ class NetworkService {
 
     companion object {
         private var INSTANCE: NetworkService? = null
-        private val BASE_URL = "https://193.151.89.131:3000"
+        private val BASE_URL = ""
 
         fun getNetworkInstance(): NetworkService {
             if (INSTANCE === null) {

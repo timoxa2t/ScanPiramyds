@@ -8,11 +8,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Appendable
 
-@Database(entities = arrayOf(Piramyd::class), version = 3)
+@Database(entities = arrayOf(Pyramid::class), version = 1)
 abstract class AppDatabase: RoomDatabase() {
-    abstract fun piramydDao(): PiramydDao
+    abstract fun piramydDao(): PyramidDao
 
     companion object {
 
@@ -35,12 +34,12 @@ abstract class AppDatabase: RoomDatabase() {
     }
 
     private class AppDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback(){
-        override fun onOpen(db: SupportSQLiteDatabase) {
+            override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
             INSTANCE?.let { database -> scope.launch(Dispatchers.IO) { populateDatabase(database.piramydDao()) } }
         }
 
-        suspend fun populateDatabase(piramydDao: PiramydDao){
+        suspend fun populateDatabase(pyramidDao: PyramidDao){
 //            var piramydList = mutableListOf<Piramyd>()
 //          piramydList.add(Piramyd("000001049", "1066", false))
 //          piramydList.add(Piramyd("000002750", "1417", false))

@@ -5,9 +5,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Piramyd(
+data class Pyramid(
     @PrimaryKey val code: String,
     @ColumnInfo(name = "name") val name: String?,
     @ColumnInfo(name = "checked") var checked: Boolean
-)
+) {
+    constructor(): this("", "", false)
+}
+
+
 
